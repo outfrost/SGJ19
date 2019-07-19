@@ -1,0 +1,10 @@
+# Godot Engine generated files
+.import/
+export.cfg
+export_presets.cfg
+
+# Mono
+.mono/
+
+# GNU nano
+*.swp
