@@ -28,21 +28,40 @@ func _physics_process(delta):
 		ClimbingState.IDLE:
 			idleTimeElapsed += delta
 			if idleTimeElapsed >= idleTime:
-				var movementDirection = Vector3(1.0 if randf() >= 0.5 else -1.0, 0.0, 0.0)
+				var right = randf() >= 0.5
+				var movementDirection = Vector3.RIGHT if right else Vector3.LEFT
 				var collision = move_and_collide(movementDirection * 32.0, true, false, true)
 				if collision.collider is KinematicBody:
-					climbingState = ClimbingState.ROLLING_LEFT
+					climbingState = ClimbingState.ROLLING_RIGHT \
+					                if right \
+					                else ClimbingState.ROLLING_LEFT
 				else:
+					right = !right
 					movementDirection = - movementDirection
 					collision = move_and_collide(movementDirection * 32.0, true, false, true)
 					if collision.collider is KinematicBody:
-						pass # Move towards the detected KinematicBody
+						climbingState = ClimbingState.ROLLING_RIGHT \
+						                if right \
+						                else ClimbingState.ROLLING_LEFT
 		ClimbingState.ROLLING_LEFT:
-			pass
+			var collision = move_and_collide(Vector3.LEFT * movementSpeed * delta,
+			                                 true,
+			                                 false)
+			if collision:
+				climbingState = ClimbingState.CLIMBING_LEFT
 		ClimbingState.ROLLING_RIGHT:
-			pass
+			var collision = move_and_collide(Vector3.RIGHT * movementSpeed * delta,
+			                                 true,
+			                                 false)
+			if collision:
+				climbingState = ClimbingState.CLIMBING_RIGHT
 		ClimbingState.CLIMBING_LEFT:
-			pass
+			var collision = move_and_collide(Vector3.LEFT * movementSpeed * delta,
+			                                 true,
+			                                 false)
+			move_and_slide_with_snap(Vector3.UP * movementSpeed * delta,
+			                         Vector3(- 4.0, 0.0, 0.0),
+			                         collision.normal)
 		ClimbingState.CLIMBING_RIGHT:
 			pass
 		ClimbingState.ROLLING_UP_LEFT:
@@ -55,20 +74,3 @@ func _physics_process(delta):
 			pass
 		ClimbingState.JUMPING_UP:
 			pass
-	
-	if movementDirection.abs() == 0.0:
-		movementDirection = Vector3(1.0 if randf() >= 0.5 else -1.0, 0.0, 0.0)
-		var collision = move_and_collide(movementDirection * 32.0, true, false, true)
-		if collision.collider is KinematicBody:
-			pass # Move towards the detected KinematicBody
-		else:
-			movementDirection = - movementDirection
-			collision = move_and_collide(movementDirection * 32.0, true, false, true)
-			if collision.collider is KinematicBody:
-				pass # Move towards the detected KinematicBody
-	else:
-		var collision = move_and_collide(movementDirection * movementSpeed * delta, true, false)
-		if collision:
-			move_and_slide_with_snap(movementDirection * movementSpeed * delta,
-			                         movementDirection,
-			                         collision.normal)
