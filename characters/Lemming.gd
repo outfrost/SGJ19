@@ -14,11 +14,13 @@ enum ClimbingState {
 	STUCK
 }
 
-const movementSpeed = 1.0
+const movementSpeed = 0.5
 const idleTime = 1.0
 
 var climbingState = ClimbingState.IDLE
 var idleTimeElapsed = 0.0
+
+var monitor
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -99,6 +101,8 @@ func _physics_process(delta):
 				                                  false)
 				if collision2:
 					climbingState = ClimbingState.STUCK
+					if monitor and monitor.has_method("lemmingStuck"):
+						monitor.lemmingStuck(self)
 				else:
 					move_and_collide(Vector3.UP * movementSpeed * delta * 3,
 					                 true,
@@ -118,6 +122,8 @@ func _physics_process(delta):
 				                                  false)
 				if collision2:
 					climbingState = ClimbingState.STUCK
+					if monitor and monitor.has_method("lemmingStuck"):
+						monitor.lemmingStuck(self)
 				else:
 					move_and_collide(Vector3.UP * movementSpeed * delta * 3,
 					                 true,
@@ -133,6 +139,11 @@ func _physics_process(delta):
 			pass
 		ClimbingState.JUMPING_UP:
 			pass
+		_:
+			pass
 
 func zeroZ(vec : Vector3):
 	return Vector3(vec.x, vec.y, 0.0)
+
+func setMonitor(monitor : Object):
+	self.monitor = monitor

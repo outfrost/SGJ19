@@ -5,9 +5,14 @@ const blockScenePaths = PoolStringArray([ "res://items/cart01-01.tscn",
                                           "res://items/cucumbertower.tscn",
                                           "res://items/eiffeltower.tscn",
                                           "res://items/factory01-01.tscn",
-                                          "res://items/tetrisblockL.tscn" ])
+                                          "res://items/tetrisblockL.tscn",
+										"res://items/tetrisblockI.tscn",
+										"res://items/tetrisblockT.tscn" ])
 const spawnInterval = 3.0
 const advanceVelocity = Vector3(0.0, 0.25, 0.0)
+
+var started = false
+var going = true
 
 var timeSinceLastSpawn = spawnInterval
 var itemScenes = Array()
@@ -20,18 +25,27 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	timeSinceLastSpawn += delta
-	while timeSinceLastSpawn >= spawnInterval:
-		timeSinceLastSpawn -= spawnInterval
+	if !started:
 		spawnItem()
+		started = true
 
 func _physics_process(delta):
-	translate(advanceVelocity * delta)
+	if going:
+		translate(advanceVelocity * delta)
 
 func spawnItem():
 	var spatial = randomItemScene().instance() as Spatial
+	var scriptable = spatial.find_node("Kinematic*")
+	if scriptable.has_method("setSpawner"):
+		scriptable.setSpawner(self)
 	spatial.translation = translation
 	get_parent().add_child(spatial)
 
 func randomItemScene():
 	return itemScenes[int(rand_range(0, itemScenes.size() - 0.5))]
+
+func nextBlock():
+	spawnItem()
+
+func gameOver():
+	going = false

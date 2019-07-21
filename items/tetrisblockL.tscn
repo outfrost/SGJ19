@@ -4,10 +4,10 @@
 [ext_resource path="res://res3d/tetris1.dae" type="PackedScene" id=2]
 
 [sub_resource type="BoxShape" id=1]
-extents = Vector3( 1, 1.05, 3.35 )
+extents = Vector3( 0.5, 0.525, 1.7 )
 
 [sub_resource type="BoxShape" id=2]
-extents = Vector3( 1, 1.05, 3.05 )
+extents = Vector3( 0.5, 0.525, 1.55 )
 
 [node name="Tetris Block L" type="Spatial"]
 
@@ -16,11 +16,12 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.5, 0
 script = ExtResource( 1 )
 
 [node name="Scene Root" parent="KinematicBody" instance=ExtResource( 2 )]
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="KinematicBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 2.35 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 1.175 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2" type="CollisionShape" parent="KinematicBody"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.05, 4.65 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.075, 2.35 )
 shape = SubResource( 2 )

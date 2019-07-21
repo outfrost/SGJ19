@@ -1,28 +1,35 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://BlockSpawner.gd" type="Script" id=1]
-[ext_resource path="res://baseplatform.tscn" type="PackedScene" id=2]
-[ext_resource path="res://sidewall.tscn" type="PackedScene" id=3]
-[ext_resource path="res://characters/egg.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Game.gd" type="Script" id=1]
+[ext_resource path="res://BlockSpawner.gd" type="Script" id=2]
+[ext_resource path="res://baseplatform.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sidewall.tscn" type="PackedScene" id=4]
+[ext_resource path="res://lemmingmonitor.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Tetris__Smurfs_akordeon.ogg" type="AudioStream" id=6]
 
-[node name="Main Scene" type="Spatial"]
-
-[node name="Block Spawner" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0 )
+[node name="MainScene" type="Spatial"]
 script = ExtResource( 1 )
 
-[node name="Main Camera" type="Camera" parent="Block Spawner"]
+[node name="BlockSpawner" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0 )
+script = ExtResource( 2 )
+
+[node name="MainCamera" type="Camera" parent="BlockSpawner"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 19 )
 fov = 50.0
 far = 256.0
 
-[node name="Base Platform" parent="." instance=ExtResource( 2 )]
+[node name="Base Platform" parent="." instance=ExtResource( 3 )]
 
-[node name="Side Wall Left" parent="." instance=ExtResource( 3 )]
+[node name="Side Wall Left" parent="." instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 0, 0 )
 
-[node name="Side Wall Right" parent="." instance=ExtResource( 3 )]
+[node name="Side Wall Right" parent="." instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 0 )
 
-[node name="Egg" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.07, 0 )
+[node name="Lemming Monitor" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+autoplay = true

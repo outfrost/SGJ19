@@ -11,7 +11,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5 )
 script = ExtResource( 1 )
 
 [node name="CollisionShape" parent="KinematicBody" instance=ExtResource( 2 )]
-transform = Transform( 0.398478, -0.0348623, 0, 0.0348623, 0.398478, 0, 0, 0, 0.4, 0, 1.1, 0 )
+transform = Transform( 0.199239, -0.0174311, 0, 0.0174311, 0.199239, 0, 0, 0, 0.2, 0, 0.55, 0 )
 
 [node name="Scene Root" parent="KinematicBody" instance=ExtResource( 3 )]
-transform = Transform( 0.398478, -0.0348623, 0, 0.0348623, 0.398478, 0, 0, 0, 0.4, 0, 1.1, 0 )
+transform = Transform( 0.199239, -0.0174311, 0, 0.0174311, 0.199239, 0, 0, 0, 0.2, 0, 0.55, 0 )
