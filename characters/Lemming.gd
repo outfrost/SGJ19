@@ -10,7 +10,8 @@ enum ClimbingState {
 	ROLLING_UP_RIGHT,
 	JUMPING_LEFT,
 	JUMPING_RIGHT,
-	JUMPING_UP
+	JUMPING_UP,
+	STUCK
 }
 
 const movementSpeed = 1.0
@@ -26,12 +27,13 @@ func _ready():
 func _physics_process(delta):
 	match climbingState:
 		ClimbingState.IDLE:
-			idleTimeElapsed += delta
-			if idleTimeElapsed >= idleTime:
+			if idleTimeElapsed < idleTime:
+				idleTimeElapsed += delta
+			else:
 				var right = randf() >= 0.5
 				var movementDirection = Vector3.RIGHT if right else Vector3.LEFT
 				var collision = move_and_collide(movementDirection * 32.0, true, false, true)
-				if collision.collider is KinematicBody:
+				if collision and collision.collider is KinematicBody:
 					climbingState = ClimbingState.ROLLING_RIGHT \
 					                if right \
 					                else ClimbingState.ROLLING_LEFT
@@ -39,7 +41,7 @@ func _physics_process(delta):
 					right = !right
 					movementDirection = - movementDirection
 					collision = move_and_collide(movementDirection * 32.0, true, false, true)
-					if collision.collider is KinematicBody:
+					if collision and collision.collider is KinematicBody:
 						climbingState = ClimbingState.ROLLING_RIGHT \
 						                if right \
 						                else ClimbingState.ROLLING_LEFT
@@ -59,18 +61,78 @@ func _physics_process(delta):
 			var collision = move_and_collide(Vector3.LEFT * movementSpeed * delta,
 			                                 true,
 			                                 false)
-			move_and_slide_with_snap(Vector3.UP * movementSpeed * delta,
-			                         Vector3(- 4.0, 0.0, 0.0),
-			                         collision.normal)
+			if collision:
+				var collision2 = move_and_collide(Vector3.UP * movementSpeed * delta,
+				                                  true,
+				                                  false)
+				if collision2:
+					climbingState = ClimbingState.ROLLING_UP_LEFT
+				else:
+					move_and_collide(Vector3.LEFT * movementSpeed * delta * 3.0,
+					                 true,
+					                 false)
+			else:
+				climbingState = ClimbingState.IDLE
 		ClimbingState.CLIMBING_RIGHT:
-			pass
+			var collision = move_and_collide(Vector3.RIGHT * movementSpeed * delta,
+			                                 true,
+			                                 false)
+			if collision:
+				var collision2 = move_and_collide(Vector3.UP * movementSpeed * delta,
+				                                  true,
+				                                  false)
+				if collision2:
+					climbingState = ClimbingState.ROLLING_UP_RIGHT
+				else:
+					move_and_collide(Vector3.RIGHT * movementSpeed * delta * 3.0,
+					                 true,
+					                 false)
+			else:
+				climbingState = ClimbingState.IDLE
 		ClimbingState.ROLLING_UP_LEFT:
-			pass
+			var collision = move_and_collide(Vector3.UP * movementSpeed * delta,
+			                                 true,
+			                                 false)
+			if collision and collision.collider is KinematicBody:
+				var collision2 = move_and_collide(Vector3.RIGHT * movementSpeed * delta,
+				                                  true,
+				                                  false)
+				if collision2:
+					climbingState = ClimbingState.STUCK
+				else:
+					move_and_collide(Vector3.UP * movementSpeed * delta * 3,
+					                 true,
+					                 false)
+				#move_and_slide_with_snap(Vector3.RIGHT * movementSpeed * delta,
+				#                         Vector3(0.0, 4.0, 0.0),
+				#                         zeroZ(collision.normal))
+			else:
+				climbingState = ClimbingState.CLIMBING_LEFT
 		ClimbingState.ROLLING_UP_RIGHT:
-			pass
+			var collision = move_and_collide(Vector3.UP * movementSpeed * delta,
+			                                 true,
+			                                 false)
+			if collision and collision.collider is KinematicBody:
+				var collision2 = move_and_collide(Vector3.LEFT * movementSpeed * delta,
+				                                  true,
+				                                  false)
+				if collision2:
+					climbingState = ClimbingState.STUCK
+				else:
+					move_and_collide(Vector3.UP * movementSpeed * delta * 3,
+					                 true,
+					                 false)
+				#move_and_slide_with_snap(Vector3.LEFT * movementSpeed * delta,
+				#                         Vector3(0.0, 4.0, 0.0),
+				#                         zeroZ(collision.normal))
+			else:
+				climbingState = ClimbingState.CLIMBING_RIGHT
 		ClimbingState.JUMPING_LEFT:
 			pass
 		ClimbingState.JUMPING_RIGHT:
 			pass
 		ClimbingState.JUMPING_UP:
 			pass
+
+func zeroZ(vec : Vector3):
+	return Vector3(vec.x, vec.y, 0.0)
