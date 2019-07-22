@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Tetris__Smurfs_akordeon.ogg-c127d351f0cb1639781576e849e753aa.oggstr"
+
+[deps]
+
+source_file="res://sound/Tetris__Smurfs_akordeon.ogg"
+dest_files=[ "res://.import/Tetris__Smurfs_akordeon.ogg-c127d351f0cb1639781576e849e753aa.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

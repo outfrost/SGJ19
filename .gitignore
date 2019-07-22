@@ -1,3 +1,6 @@
+# Build
+/build/
+
 # Godot Engine generated files
 .import/
 export.cfg
@@ -5,6 +8,10 @@ export_presets.cfg
 
 # Mono
 .mono/
+/Properties/
+*.csproj
+*.sln
+mono_crash.*
 
 # GNU nano
 *.swp
