@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="SGJ19"
-run/main_scene="res://main_scene.tscn"
+run/main_scene="res://stage/main_scene.tscn"
 config/icon="res://icon.png"
 
 [input]
@@ -59,4 +59,4 @@ restart_game={
 
 [rendering]
 
-environment/default_environment="res://default_env.tres"
+environment/default_environment="res://environment/default_env.tres"
